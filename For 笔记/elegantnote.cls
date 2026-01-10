@@ -235,7 +235,9 @@
   citecolor=ecolor,
   filecolor=ecolor,
   linkcolor=ecolor,
-  urlcolor=ecolor
+  urlcolor=ecolor,
+  bookmarksnumbered=true, % 书签带章节编号
+  linktoc=all % 目录的字和页码都能点
 }
 
 \RequirePackage{hologo}
@@ -387,6 +389,12 @@
 
 \fancypagestyle{fancy-note}{
   \fancyhf{} % clear header/footer settings
+  \fancyhead[C]{\footnotesize\textcolor{gray}{\nouppercase{\leftmark}}}
+  \fancyfoot[C]{\footnotesize\textcolor{gray}{\thepage}}
+}
+
+\fancypagestyle{fancy-toc}{
+  \fancyhf{}
   \fancyfoot[C]{\footnotesize\textcolor{gray}{\thepage}}
 }
 
@@ -511,9 +519,15 @@
 \definecolor{frenchplum}{RGB}{190,20,83}
 \lstset{language=[LaTeX]TeX,
   style=estyle,
+  backgroundcolor=\color{gray!5}, % 增加浅灰背景
+  frame=single, % 单线边框
+  frameround=tttt, % 圆角边框
+  rulecolor=\color{ecolor}, % 边框颜色跟随主题
+  framesep=5pt, % 内容与边框距离
   autogobble=true,
   texcsstyle=*\color{winered},
-  numbers=none,
+  numbers=left, % 显示行号
+  numberstyle=\tiny\color{gray},
   breaklines=true,
   keywordstyle=\color{winered},
   commentstyle=\color{gray},
@@ -586,3 +600,26 @@
 
 % restore the tt default family to lmodern tt family
 \renewcommand\ttdefault{lmtt}
+
+% 重定义目录命令，单独设置行距和段间距
+\let\oldtableofcontents\tableofcontents
+\renewcommand{\tableofcontents}{%
+  \newpage%
+  \begingroup%
+  \pagestyle{fancy-toc}%
+  \linespread{1.1}%
+  \setlength{\parskip}{0pt}%
+  \pagenumbering{Roman} % 开始目录使用罗马数字
+  \oldtableofcontents%
+  \clearpage%
+  \endgroup%
+  \pagestyle{fancy-note}%
+  \pagenumbering{arabic} % 正文重新从 1 开始使用阿拉伯数字
+}
+
+% 新增命令：无编号章节（自动更新页眉）
+% 用法：\usection{符号说明} 代替 \section*{符号说明}
+\newcommand{\usection}[1]{%
+  \section*{#1}%
+  \markboth{#1}{#1}% 手动更新页眉为当前标题
+}
