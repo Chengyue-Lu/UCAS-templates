@@ -1,0 +1,106 @@
+%!TEX program = xelatex
+\documentclass[a4paper,12pt]{ctexart}
+
+% ----------------------------------------------------------------------------
+% 引入自定义模板包
+% 选项说明 (可自由组合):
+%   english=true    : 开启英文模式 (Abstract, Keywords, References 等变为英文)
+%   withlogo=true   : 开启带学校Logo的页眉 (推荐用于常规作业)
+%   coverpage=true  : 开启独立封面页模式 (推荐用于期末大作业)
+%   watermark=true  : 开启 "UCAS DRAFT" 水印 (用于草稿)
+% ----------------------------------------------------------------------------
+\usepackage[english=false, withlogo=true, coverpage=false, watermark=false]{UCASPaper}
+
+% ----------------------------------------------------------------------------
+% 论文基本信息
+% ----------------------------------------------------------------------------
+\title{基于 \LaTeX 的课程论文模板\protect\\ 及功能特性演示} 
+
+% 作者信息：使用 \addauthor{姓名}{单位} 格式添加
+\addauthor{路诚钺}{中国科学院空天信息创新研究院}
+
+\date{\today}
+
+\begin{document}
+
+% 自动根据 coverpage 选项决定生成独立封面还是紧凑标题
+\maketitle
+
+% ----------------------------------------------------------------------------
+% 摘要与关键词
+% ----------------------------------------------------------------------------
+\begin{abstract}
+本模板旨在为中国科学院大学的学生提供一套灵活、规范的课程论文写作方案。它集成了常用的学术写作功能，包括\textbf{代码高亮}、\textbf{数学公式排版}、\textbf{独立封面生成}、\textbf{草稿水印}以及最新的\textbf{中英文模式切换}。使用者可以通过修改 \texttt{UCASPaper} 包的参数，一键切换论文风格，无需手动调整复杂的 \LaTeX 代码。本文档将作为一份综合指南，演示上述所有功能的具体用法。
+
+\end{abstract}
+
+\keywords{课程论文；LaTeX模板；代码高亮；国际化支持；模块化}
+
+% ----------------------------------------------------------------------------
+% 正文部分
+% ----------------------------------------------------------------------------
+\section{引言}
+本文档旨在展示 \textbf{UCASPaper} 模板的全功能特性。
+
+\section{核心功能配置}
+
+\subsection{中英文模式切换}
+在引入包时设置 [english=true]，系统会自动将以下标签转换为英文，适合撰写全英文报告或向国际会议投稿：
+\begin{itemize}
+    \item 摘要标题 $\rightarrow$ \textbf{Abstract}
+    \item 关键词前缀 $\rightarrow$ \textbf{Keywords:}
+    \item 参考文献标题 $\rightarrow$ \textbf{References}
+    \item 图表标题 $\rightarrow$ \textbf{Figure X} / \textbf{Table X}
+\end{itemize}
+
+\subsection{灵活的封面与水印}
+\begin{itemize}
+    \item \textbf{独立封面}：设置 \texttt{coverpage=true}，会自动生成包含校徽大Logo的独立首页，适合期末大作业。
+    \item \textbf{水印标记}：设置 \texttt{watermark=true}，页面背景会出现淡灰色的 "UCAS DRAFT" 字样，适合审阅。
+\end{itemize}
+
+\section{排版功能演示}
+
+\subsection{优雅的代码插入}
+理工科课程论文经常需要展示算法源码。现在你可以直接使用 standard \texttt{lstlisting} 环境，模板已内置了类似 IDE 的高亮配色：
+
+\begin{lstlisting}[language=Python, caption={Python代码示例: Hello UCAS}]
+def hello_ucas(name):
+    """
+    这是一个简单的函数文档字符串
+    """
+    print(f"Hello, {name} from UCAS!")
+    
+    # 计算斐波那契数列
+    a, b = 0, 1
+    for _ in range(10):
+        a, b = b, a + b
+    return a
+
+if __name__ == "__main__":
+    result = hello_ucas("Student")
+    print(f"Result: {result}")
+\end{lstlisting}
+
+
+\subsection{图表引用}
+如图 \ref{fig:logo} 所示
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.3\textwidth]{ucas_logo.pdf}
+    \caption{Logo 标题会自动适配语言}
+    \label{fig:logo}
+\end{figure}
+
+\section{结论}
+模块化设计使得该模板能够适应从“每周作业”到“期末大报告”的多种场景。
+
+% ----------------------------------------------------------------------------
+% 参考文献
+% ----------------------------------------------------------------------------
+\begin{thebibliography}{99}
+    \bibitem{latex} Lamport L. LaTeX: A document preparation system[M]. 1994.
+    \bibitem{template} UCAS Template Contributors. UCAS Thesis Template. 2026.
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,65 @@
+% 通用作业模板 (中文) — 可直接用于 XeLaTeX / pdfLaTeX
+
+\documentclass[UTF8]{ctexart}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{caption}
+% 可选页眉页脚
+% \usepackage{fancyhdr}
+% \pagestyle{fancy}
+
+% ---- 元信息（请在文档开头设置这些命令） ----
+\newcommand{\course}{大气飞行动力学}
+\newcommand{\assignment}{第7次作业}
+\newcommand{\studentname}{路诚钺}
+\newcommand{\studentid}{202518019435002}
+\newcommand{\due}{\today}
+
+% ---- 文档开始 ----
+\begin{document}
+
+\begin{center}
+  {\Huge \bfseries \course}\\[1ex]
+  {\large \assignment}\\[2ex]
+  \rule{0.6\textwidth}{0.6pt}\\[2ex]
+  姓名：\underline{\studentname} \quad 学号：\underline{\studentid} \\
+  日期：\due
+\end{center}
+
+\vspace{1.5em}
+
+% 简短说明：在下面按题号填写答案。
+\section*{解答}
+
+% 范例题目与答题区
+\subsection*{第1题}
+\textbf{题目：} 在此粘贴或写出题目。
+
+\textbf{解：}
+\vspace{1em}
+
+% 建议的子结构：推导、计算、结论
+\subsubsection*{推导}
+在此书写推导过程。可使用数学环境：
+\[ E=mc^2 \]
+
+\subsubsection*{计算 / 结果}
+在此给出计算过程与最终结果。
+
+\subsubsection*{结论}
+在此写结论或答题要点。
+
+% 复用多个题目时复制上面的块。
+
+\vfill
+% 可选附录或图表
+%\section*{附录}
+%\begin{figure}[h]
+%  \centering
+%  \fbox{\parbox[c][6cm][c]{10cm}{在此放置图像或截图（使用 \texttt{\includegraphics}）}}
+%  \caption{示例图}
+%\end{figure}
+
+\end{document}

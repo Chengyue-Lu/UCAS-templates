@@ -1,0 +1,209 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{UCASPaper}[2026/01/10 v1.2 UCAS Course Paper Template]
+
+\RequirePackage{kvoptions}
+\SetupKeyvalOptions{
+    family=UCAS,
+    prefix=UCAS@
+}
+\DeclareBoolOption[false]{withlogo}   % 页眉Logo开关
+\DeclareBoolOption[false]{coverpage}  % 独立封面开关
+\DeclareBoolOption[false]{watermark}  % 水印开关
+\DeclareBoolOption[false]{english}    % 英文模式开关 [NEW]
+\ProcessKeyvalOptions*
+
+% 页面布局 Layout
+\RequirePackage[left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm]{geometry}
+
+% 常用宏包 Packages
+\RequirePackage{fancyhdr}
+\RequirePackage{graphicx}
+\RequirePackage{amsmath, amssymb, amsthm}
+\RequirePackage{booktabs}
+\RequirePackage{hyperref}
+\RequirePackage{xcolor}
+\RequirePackage{caption}
+\RequirePackage{enumitem}
+\RequirePackage{authblk}
+\RequirePackage{listings} % 代码高亮支持
+\RequirePackage{draftwatermark} % 水印支持
+
+% -------------------------
+% 模块 1: 代码高亮样式配置
+% -------------------------
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{dkgreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{gray},
+    stringstyle=\color{mauve},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    frame=single % 给代码加边框
+}
+
+% -------------------------
+% 模块 2: 水印配置
+% -------------------------
+\ifUCAS@watermark
+    \SetWatermarkText{\sffamily UCAS DRAFT} % 强制无衬线字体
+    \SetWatermarkScale{0.8}       
+    \SetWatermarkColor[gray]{0.9} 
+\else
+    \SetWatermarkText{} 
+\fi
+
+% -------------------------
+% 模块 3: 中英文语言适配 [NEW]
+% -------------------------
+\ifUCAS@english
+    \newcommand{\UCAS@kwlabel}{Keywords: }
+    % 强制重置常用标题为英文 (针对使用 ctexart 的情况)
+    \AtBeginDocument{
+        \renewcommand{\abstractname}{Abstract}
+        \renewcommand{\refname}{References}
+        \renewcommand{\figurename}{Figure}
+        \renewcommand{\tablename}{Table}
+        \renewcommand{\contentsname}{Contents}
+        % 如果载入了 ctex，将日期格式设回英文 (例如: January 10, 2026)
+        \@ifpackageloaded{ctex}{\ctexset{today=old}}{}
+    }
+\else
+    \newcommand{\UCAS@kwlabel}{关键词：}
+\fi
+
+% -------------------------
+% 模块 4: 自动作者管理
+% -------------------------
+% Set author/affiliation font
+\renewcommand*{\Authfont}{\large}
+\renewcommand*{\Affilfont}{\small}
+\setlength{\affilsep}{0.5em}
+
+% Helper for adding authors easily
+\newcounter{UCAS@authcount}
+\newcommand{\addauthor}[2]{%
+  \stepcounter{UCAS@authcount}%
+  \author[\theUCAS@authcount]{#1}%
+  \affil[\theUCAS@authcount]{#2}%
+}
+
+% 设置链接颜色
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+% 图片路径 - 已配置全局TEXINPUTS，此处注释掉以避免冲突
+% \graphicspath{{./figures/}{../For 报告撰写/figures/}}
+
+% -------------------------
+% 页眉页脚设置 Header/Footer
+% -------------------------
+\newcommand{\UCAS@setupheader}{
+  \pagestyle{fancy}
+  \fancyhf{}
+  % 直接使用文件名加载logo，依靠TEXINPUTS寻找
+  \fancyhead[L]{\includegraphics[height=0.9cm]{ucas_logo.pdf}}
+  \fancyhead[R]{\small\nouppercase\leftmark}
+  \fancyfoot[C]{\thepage}
+  \setlength{\headheight}{28pt}
+}
+
+\newcommand{\UCAS@clearheader}{
+  \pagestyle{plain}
+}
+
+% 用户指令：开启/关闭页眉Logo
+\newcommand{\UseLogoHeader}{
+  \UCAS@setupheader
+}
+\newcommand{\NoLogoHeader}{
+  \UCAS@clearheader
+}
+
+% 根据载入选项初始化
+\ifUCAS@withlogo
+  \UseLogoHeader
+\else
+  \NoLogoHeader
+\fi
+
+% -------------------------
+% 模块 5: 封面页逻辑重构
+% -------------------------
+% 保存原始 maketitle，因为 authblk 会重写它
+\let\oldmaketitle\maketitle
+
+\renewcommand{\maketitle}{
+    \ifUCAS@coverpage
+        \begin{titlepage}
+            \centering
+            \vspace*{2cm}
+            % Logo - 直接使用文件名
+            \includegraphics[width=10cm]{ucas_logo.pdf}
+            \\[2cm]
+            
+            % 标题
+            {\Huge\bfseries \@title \par}
+            \vspace{2cm}
+            
+            % 作者
+            {\Large \@author \par}
+            
+            \vfill
+            
+            {\Large \@date \par}
+            \vspace{2cm}
+        \end{titlepage}
+        \setcounter{page}{1}
+    \else
+        \oldmaketitle
+    \fi
+}
+
+% -------------------------
+% 摘要与关键词样式
+% -------------------------
+\renewenvironment{abstract}{%
+    \ifUCAS@coverpage
+        \thispagestyle{plain}
+    \else
+        \thispagestyle{plain}
+    \fi
+    \vspace*{1em}
+    \centerline{\large\bfseries \abstractname}
+    \vspace{0.5em}
+    \begin{quote}\small
+}{%
+    \end{quote}
+    \vspace{0.5em}
+}
+
+% 使用动态定义的 kwlabel
+\newcommand{\keywords}[1]{%
+    \par\vspace{1ex}\noindent\textbf{\UCAS@kwlabel}#1%
+}
+
+% 优化列表间距
+\setlist{nosep}
+
+\setlength{\headheight}{30pt}
+
+\endinput
