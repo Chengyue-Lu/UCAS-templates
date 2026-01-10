@@ -81,3 +81,12 @@
 ## ⚠️ 注意事项
 
 - 部分模板使用了系统字体，Linux/macOS 用户可能需要调整字体配置。
+- 通过全局设置 "env" 变量 `TEXINPUTS` 可方便地管理自定义样式文件路径。设置后你无需把样式文件放在每个项目目录下。
+
+## 🙏 致谢
+
+感谢以下开源项目提供的灵感和基础：
+
+- [jweihe/UCAS_Latex_Template](https://github.com/jweihe/UCAS_Latex_Template)
+- [SINTEF-IT/BeamerThemeSINTEF](https://www.overleaf.com/latex/templates/guo-ke-da-zhong-guo-ke-xue-yuan-da-xue-zhong-wen-mo-ban-ucas-beamer/znmqjrpxpr)
+- [ElegantNote](https://github.com/ElegantLaTeX/ElegantNote)
