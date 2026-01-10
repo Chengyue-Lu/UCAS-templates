@@ -32,7 +32,7 @@
   - 编译流程推荐: `xelatex -> bibtex -> xelatex*2`。
 - **致谢**: 基于 [jweihe/UCAS_Latex_Template](https://github.com/jweihe/UCAS_Latex_Template) 修改。
 
-### 3. Beamer 演示模板 (`国科大___中国科学院大学中文模板UCAS_beamer`)
+### 3. Beamer 演示模板 (`For beamer`)
 
 基于 SINTEF 主题的精美学术演示文稿模板。
 
