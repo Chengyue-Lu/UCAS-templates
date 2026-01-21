@@ -20,7 +20,7 @@
 \RequirePackage[left=2.50cm, right=2.50cm, top=2.50cm, bottom=2.50cm]{geometry}
 
 %%一些必要的宏包
-\RequirePackage[unicode=true,colorlinks,urlcolor=blue,linkcolor=blue,bookmarksnumbered=blue]{hyperref}
+\RequirePackage[unicode=true,colorlinks,urlcolor=blue,linkcolor=blue,bookmarksnumbered=true]{hyperref}
 \RequirePackage{latexsym,amssymb,amsmath,amsbsy,amsopn,amstext,amsthm,amsxtra,color,bm,calc,ifpdf}
 \RequirePackage{graphicx}
 \RequirePackage{enumerate}
@@ -144,3 +144,14 @@
 \maketitle
 }
 
+%断行设置
+% --- 允许URL在任意字符处换行，解决参考文献Overfull问题 ---
+\def\UrlBreaks{\do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J
+\do\K\do\L\do\M\do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V
+\do\W\do\X\do\Y\do\Z\do\^\do\_\do\`\do\[\do\]\do\a\do\b
+\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m
+\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x
+\do\y\do\z\do\0\do\1\do\2\do\3\do\4\do\5\do\6\do\7\do\8
+\do\9\do\.\do\@\do\\\do\/\do\!\do\_\do\|\do\;\do\>\do\]
+\do\)\do\,\do\?\do\'\do+\do\=\do\#\do\%}
+% ----------------------------------------------------
