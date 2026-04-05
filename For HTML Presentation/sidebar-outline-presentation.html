@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML 演示 - 目录栏版本</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <style>
+        :root,
+        body[data-theme="aurora"] {
+            --bg: #0b1020;
+            --bg-2: #121a33;
+            --surface: rgba(18, 24, 46, 0.92);
+            --surface-strong: rgba(10, 16, 32, 0.94);
+            --surface-soft: rgba(255, 255, 255, 0.06);
+            --text: #edf2ff;
+            --muted: rgba(237, 242, 255, 0.72);
+            --accent: #7c9cff;
+            --accent-2: #57d6bf;
+            --accent-3: #f7c46c;
+            --border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+            --code-bg: #0b1020;
+            --code-text: #d9e4ff;
+            --math-bg: rgba(124, 156, 255, 0.12);
+        }
+
+        body[data-theme="midnight"] {
+            --bg: #0f1320;
+            --bg-2: #141a28;
+            --surface: rgba(22, 28, 40, 0.94);
+            --surface-strong: rgba(15, 19, 30, 0.96);
+            --surface-soft: rgba(255, 255, 255, 0.05);
+            --text: #f1f4f9;
+            --muted: rgba(241, 244, 249, 0.70);
+            --accent: #6bd4ff;
+            --accent-2: #9b7bff;
+            --accent-3: #f59e0b;
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 28px 70px rgba(0, 0, 0, 0.38);
+            --code-bg: #111827;
+            --code-text: #e5eefc;
+            --math-bg: rgba(107, 212, 255, 0.12);
+        }
+
+        body[data-theme="paper"] {
+            --bg: #f4f0e8;
+            --bg-2: #ebe4d7;
+            --surface: rgba(255, 255, 255, 0.88);
+            --surface-strong: rgba(255, 255, 255, 0.96);
+            --surface-soft: rgba(29, 38, 59, 0.05);
+            --text: #182032;
+            --muted: rgba(24, 32, 50, 0.72);
+            --accent: #4a72ff;
+            --accent-2: #0f9d8b;
+            --accent-3: #b76f00;
+            --border: rgba(24, 32, 50, 0.10);
+            --shadow: 0 24px 60px rgba(34, 44, 70, 0.15);
+            --code-bg: #1f2a44;
+            --code-text: #eef4ff;
+            --math-bg: rgba(74, 114, 255, 0.10);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 22%, transparent), transparent 34%),
+                radial-gradient(circle at bottom right, color-mix(in srgb, var(--accent-2) 18%, transparent), transparent 28%),
+                linear-gradient(180deg, var(--bg-2), var(--bg));
+            color: var(--text);
+            font-family: "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            height: 100vh;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            padding: 28px 20px;
+            background: linear-gradient(180deg, var(--surface-strong), var(--surface));
+            border-right: 1px solid var(--border);
+            backdrop-filter: blur(18px);
+            box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.03);
+            transition: transform 0.35s ease, opacity 0.35s ease;
+            z-index: 10;
+        }
+
+        .brand {
+            padding: 10px 10px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 1.15rem;
+            letter-spacing: 0.04em;
+        }
+
+        .brand p {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .theme-switcher {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            padding: 0 10px;
+        }
+
+        .theme-switcher button {
+            appearance: none;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 8px;
+            background: var(--surface-soft);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.86rem;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+        }
+
+        .theme-switcher button:hover {
+            transform: translateY(-1px);
+            border-color: color-mix(in srgb, var(--accent) 44%, var(--border));
+        }
+
+        .theme-switcher button.active {
+            background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 30%, transparent), color-mix(in srgb, var(--accent-2) 20%, transparent));
+            border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
+        }
+
+        .outline {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow: auto;
+            padding-right: 4px;
+        }
+
+        .outline button {
+            appearance: none;
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--muted);
+            text-align: left;
+            padding: 12px 14px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+            font-size: 0.98rem;
+            line-height: 1.45;
+        }
+
+        .outline button:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            transform: translateX(2px);
+        }
+
+        .outline button.active {
+            background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 22%, transparent), color-mix(in srgb, var(--accent-2) 16%, transparent));
+            border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+            color: var(--text);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+        }
+
+        .outline .index {
+            display: block;
+            font-size: 0.74rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(237, 242, 255, 0.52);
+            margin-bottom: 4px;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--surface-soft);
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .stage {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(16px) scale(0.995);
+            transition: opacity 0.28s ease, transform 0.28s ease;
+        }
+
+        .page.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+        }
+
+        .page-body {
+            height: 100%;
+            overflow-y: auto;
+            padding: 44px 48px 42px;
+            scroll-behavior: smooth;
+        }
+
+        .page-body::-webkit-scrollbar,
+        .outline::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .page-body::-webkit-scrollbar-thumb,
+        .outline::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+        }
+
+        .cover {
+            display: grid;
+            align-items: center;
+            min-height: 100%;
+            padding: 24px 20px;
+        }
+
+        .hero {
+            max-width: 980px;
+            padding: 52px;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            background: linear-gradient(135deg, color-mix(in srgb, var(--surface) 88%, white 6%), color-mix(in srgb, var(--surface) 84%, transparent));
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: -120px auto auto -120px;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: color-mix(in srgb, var(--accent) 22%, transparent);
+            filter: blur(14px);
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: auto -120px -120px auto;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: color-mix(in srgb, var(--accent-2) 18%, transparent);
+            filter: blur(16px);
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+            color: rgba(237, 242, 255, 0.82);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 44px;
+            height: 1px;
+            background: rgba(237, 242, 255, 0.35);
+        }
+
+        .hero h2,
+        .page h2 {
+            margin: 0;
+            font-size: clamp(2rem, 3vw, 3.4rem);
+            line-height: 1.08;
+        }
+
+        .hero p,
+        .page p {
+            color: var(--muted);
+            line-height: 1.8;
+            font-size: 1.03rem;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 26px;
+            margin-top: 34px;
+        }
+
+        .hero-card,
+        .panel {
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            background: var(--surface-soft);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+        }
+
+        .hero-card {
+            padding: 22px;
+        }
+
+        .hero-card h3,
+        .panel h3 {
+            margin: 0 0 12px;
+            font-size: 1.18rem;
+        }
+
+        .hero-card ul,
+        .panel ul {
+            margin: 0;
+            padding-left: 18px;
+            color: var(--muted);
+            line-height: 1.9;
+        }
+
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .cta,
+        .ghost {
+            appearance: none;
+            border: 0;
+            border-radius: 999px;
+            padding: 14px 22px;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .cta {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #08111f;
+        }
+
+        .ghost {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .section {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding-bottom: 34px;
+        }
+
+        .section + .section {
+            margin-top: 24px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 22px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 22px;
+        }
+
+        .panel {
+            padding: 22px;
+        }
+
+        .panel strong {
+            display: inline-block;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .callout {
+            margin-top: 20px;
+            padding: 18px 20px;
+            border-left: 4px solid var(--accent);
+            border-radius: 0 18px 18px 0;
+            background: var(--math-bg);
+            color: var(--muted);
+        }
+
+        .figure {
+            height: 200px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            background:
+                linear-gradient(135deg, color-mix(in srgb, var(--accent) 26%, transparent), color-mix(in srgb, var(--accent-2) 16%, transparent)),
+                radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.26), transparent 24%),
+                var(--surface-soft);
+            margin-top: 16px;
+            display: grid;
+            place-items: center;
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 0.96rem;
+        }
+
+        .math-block {
+            margin-top: 16px;
+            padding: 18px 20px;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            background: var(--math-bg);
+            color: var(--text);
+        }
+
+        .code {
+            margin-top: 18px;
+            padding: 20px;
+            border-radius: 18px;
+            border: 1px solid color-mix(in srgb, var(--accent) 12%, var(--border));
+            background: var(--code-bg);
+            color: var(--code-text);
+            font-family: Consolas, "SFMono-Regular", Menlo, Monaco, monospace;
+            font-size: 0.92rem;
+            line-height: 1.75;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        .inline-code {
+            padding: 0.12em 0.38em;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--accent) 12%, transparent);
+            border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--border));
+            color: var(--text);
+            font-family: Consolas, "SFMono-Regular", Menlo, Monaco, monospace;
+            font-size: 0.95em;
+        }
+
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--surface-soft);
+            color: var(--muted);
+            font-size: 0.88rem;
+        }
+
+        .tag::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--accent);
+        }
+
+        .footer-note {
+            margin-top: 22px;
+            color: rgba(237, 242, 255, 0.56);
+            font-size: 0.92rem;
+        }
+
+        .page-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .page-meta {
+            color: rgba(237, 242, 255, 0.55);
+            font-size: 0.86rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        body.cover .sidebar {
+            display: none;
+        }
+
+        body.cover .app {
+            grid-template-columns: 1fr;
+        }
+
+        body.cover .stage {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 1024px) {
+            .app {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: absolute;
+                inset: auto 16px 16px 16px;
+                height: auto;
+                max-height: 42vh;
+                border-radius: 22px;
+                border: 1px solid var(--border);
+                box-shadow: var(--shadow);
+            }
+
+            body.cover .sidebar {
+                display: none;
+            }
+
+            .stage {
+                padding-bottom: 16px;
+            }
+
+            .page-body {
+                padding: 26px 18px 110px;
+            }
+
+            .hero {
+                padding: 30px 22px;
+            }
+
+            .hero-grid,
+            .grid-2,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="cover" data-theme="aurora">
+    <div class="app">
+        <aside class="sidebar" aria-label="章节目录">
+            <div class="brand">
+                <h1>HTML 演示模板</h1>
+                <p>左侧目录栏 + 右侧滚动内容。点击目录即可切换页面，每页内部支持独立滚轮浏览。</p>
+            </div>
+            <div class="theme-switcher" aria-label="颜色主题切换">
+                <button type="button" data-theme-btn="aurora" class="active">Aurora</button>
+                <button type="button" data-theme-btn="midnight">Midnight</button>
+                <button type="button" data-theme-btn="paper">Paper</button>
+            </div>
+            <nav class="outline" id="outline"></nav>
+            <div class="sidebar-footer">
+                键盘：← → 切页，Home/End 跳转，F11 全屏。<br>
+                页面内滚轮默认滚动内容，到顶部或底部时切换上一页/下一页。
+            </div>
+        </aside>
+
+        <main class="stage" id="stage">
+            <section class="page active" data-title="封面">
+                <div class="page-body cover">
+                    <div class="hero">
+                        <div class="eyebrow">Presentation / Outline layout</div>
+                        <h2>带目录栏的 HTML 展示模板</h2>
+                        <p>这份版本适合“章节式”展示。左侧常驻目录，右侧内容区按页浏览；每一页内部保留滚动，适合长内容、图文混排和逐段讲解。</p>
+
+                        <div class="hero-grid">
+                            <div class="hero-card">
+                                <h3>适合的场景</h3>
+                                <ul>
+                                    <li>课程汇报、调研报告、项目展示</li>
+                                    <li>需要目录感和章节切换的长内容</li>
+                                    <li>每页内容较多，希望页内继续滚动阅读</li>
+                                </ul>
+                            </div>
+                            <div class="hero-card">
+                                <h3>快速特性</h3>
+                                <ul>
+                                    <li>左侧目录点击切页</li>
+                                    <li>每页独立滚动</li>
+                                    <li>无外部依赖，自包含单文件</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="cta-row">
+                            <button class="cta" data-go="1">进入目录</button>
+                            <button class="ghost" data-go="2">查看长内容示例</button>
+                        </div>
+
+                        <div class="tag-row">
+                            <span class="tag">公式支持</span>
+                            <span class="tag">代码高亮</span>
+                            <span class="tag">主题切换</span>
+                        </div>
+
+                        <div class="footer-note">提示：如果你之后想做得更像“网页课件”，这一版比传统 Beamer 更容易扩展动画、图表、交互和图像布局。</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page" data-title="1. 为什么用 HTML">
+                <div class="page-body">
+                    <div class="section">
+                        <div class="page-head">
+                            <div>
+                                <div class="page-meta">Chapter 01</div>
+                                <h2>为什么把展示改成 HTML</h2>
+                            </div>
+                        </div>
+                        <p>LaTeX Beamer 的优势是排版稳、公式强、学术感足，但它在复杂图形、网页交互和灵活布局方面会比较受限。HTML 更像一个“可编程的展示容器”，适合你后面不断往里加图表、动效、交互按钮和嵌入式媒体。</p>
+
+                        <div class="grid-2">
+                            <div class="panel">
+                                <strong>Beamer 更擅长</strong>
+                                <ul>
+                                    <li>数学公式和学术排版</li>
+                                    <li>统一严谨的版式</li>
+                                    <li>PDF 输出与打印</li>
+                                </ul>
+                            </div>
+                            <div class="panel">
+                                <strong>HTML 更擅长</strong>
+                                <ul>
+                                    <li>灵活布局和复杂图形</li>
+                                    <li>局部滚动与目录导航</li>
+                                    <li>动画、交互和多媒体嵌入</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="callout">如果你的展示内容需要“像网页一样”承载很多模块，HTML 基本会比 Beamer 更顺手。</div>
+                    </div>
+
+                    <div class="section">
+                        <div class="page-head">
+                            <div>
+                                <div class="page-meta">Chapter 01.2</div>
+                                <h2>目录栏的价值</h2>
+                            </div>
+                        </div>
+                        <div class="grid-3">
+                            <div class="panel">
+                                <strong>定位清晰</strong>
+                                <p>用户始终知道自己在整份展示中的位置，适合章节式汇报。</p>
+                            </div>
+                            <div class="panel">
+                                <strong>跳转快速</strong>
+                                <p>不需要连续翻页查找，点击目录就能直接到目标部分。</p>
+                            </div>
+                            <div class="panel">
+                                <strong>结构可见</strong>
+                                <p>比纯幻灯片更像“内容索引”，特别适合长报告。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page" data-title="2. 页面内滚动">
+                <div class="page-body">
+                    <div class="section">
+                        <div class="page-head">
+                            <div>
+                                <div class="page-meta">Chapter 02</div>
+                                <h2>页面内滚动的阅读体验</h2>
+                            </div>
+                        </div>
+                        <p>这一页故意放得长一点，模拟“一个页面里有很多小节”的情况。你滚轮时，优先在本页内部上下移动；只有到达顶部或底部时，才会自动切换上一页或下一页。</p>
+
+                        <div class="grid-2">
+                            <div class="panel">
+                                <strong>适合放什么</strong>
+                                <ul>
+                                    <li>长段解释文字</li>
+                                    <li>多张图和注释</li>
+                                    <li>表格、代码、流程图</li>
+                                </ul>
+                            </div>
+                            <div class="panel">
+                                <strong>交互方式</strong>
+                                <ul>
+                                    <li>滚轮滚动内容</li>
+                                    <li>目录栏点击切换页面</li>
+                                    <li>键盘方向键辅助翻页</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="callout">如果你希望目录栏固定、内容区按页面滚动，这个结构比 Beamer 更接近“文稿 + 导航”的组合。</div>
+                    </div>
+
+                    <div class="section">
+                        <div class="page-head">
+                            <div>
+                                <div class="page-meta">Chapter 02.1</div>
+                                <h2>长内容示例</h2>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <p>第一段：可以在这里放更细的说明，展示问题背景、方法步骤或实验设置。由于内容区可滚动，所以不必强行把所有信息压缩在一屏。</p>
+                            <p>第二段：当页面里存在图表、说明文字、对比段落和结论时，HTML 允许你按照阅读逻辑组织，而不是受限于固定幻灯片框架。</p>
+                            <p>第三段：如果后续你想做目录联动、高亮当前章节、自动生成章节列表，都可以继续往这个结构上加，不需要推翻重来。</p>
+                            <p>第四段：你也可以在这里放多图排版，比如左边图、右边说明，或者多列卡片。HTML 的 flex 和 grid 都很适合这种东西。</p>
+                            <p>第五段：滚动继续往下，可以显示更长的内容。这个模板的目标就是让“信息密度大但不拥挤”成为可能。</p>
+                            <p>第六段：如果你希望这一页更像论文报告，也可以把这一页拆成多段小标题，目录栏依然能维持整体结构感。</p>
+                            <p>第七段：长内容在演示时并不一定是坏事。只要导航清晰、视觉层次明确，它会比过度压缩的幻灯片更容易讲清楚逻辑。</p>
+                            <p>第八段：继续滚动可以体验到内容区的独立滚动效果。到达底部后，再往下滚会自动切到下一页。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page" data-title="3. 图文排版">
+                <div class="page-body">
+                    <div class="section">
+                        <div class="page-head">
+                            <div>
+                                <div class="page-meta">Chapter 03</div>
+                                <h2>图文排版与模块化内容</h2>
+                            </div>
+                        </div>
+                        <p>HTML 的优势之一是模块化特别自然。你可以直接把“图、表、说明、代码、按钮”混在同一页里，然后用布局系统去组合它们。</p>
+
+                        <div class="grid-3">
+                            <div class="panel">
+                                <strong>图形</strong>
+                                <p>可以接入 SVG、Canvas、Chart.js、D3 或任何你自己的可视化输出。</p>
+                                <div class="figure">图形占位区</div>
+                            </div>
+                            <div class="panel">
+                                <strong>代码</strong>
+                                <p>非常适合放演示代码、算法步骤、伪代码和配置示例。</p>
+<pre><code class="language-python code">def transform(x):
+    return x * x + 1
+
+print(transform(3))</code></pre>
+                            </div>
+                            <div class="panel">
+                                <strong>说明</strong>
+                                <p>文本可以自由排版，段落层级、强调、注释都很好控制。</p>
+                                <div class="figure">说明区占位</div>
+                            </div>
+                        </div>
+
+                        <div class="math-block">
+                            行内公式示例：$E = mc^2$。<br>
+                            独立公式示例：$$\nabla \cdot \mathbf{E} = \frac{\rho}{\varepsilon_0}$$
+                        </div>
+
+                        <div class="code">function goToPage(index) {
+  const page = pages[index];
+  if (!page) return;
+  activate(page);
+  page.querySelector('.page-body').scrollTop = 0;
+}</div>
+                    </div>
+
+                    <div class="section">
+                        <div class="grid-2">
+                            <div class="panel">
+                                <strong>适合的图像风格</strong>
+                                <ul>
+                                    <li>信息图、流程图、关系图</li>
+                                    <li>带标注的实验截图</li>
+                                    <li>多图对比布局</li>
+                                </ul>
+                            </div>
+                            <div class="panel">
+                                <strong>后续可扩展</strong>
+                                <ul>
+                                    <li>目录自动生成</li>
+                                    <li>当前章节高亮</li>
+                                    <li>演讲者备注与计时器</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page" data-title="4. 结论与扩展">
+                <div class="page-body">
+                    <div class="section">
+                        <div class="page-head">
+                            <div>
+                                <div class="page-meta">Chapter 04</div>
+                                <h2>结论与下一步</h2>
+                            </div>
+                        </div>
+                        <p>如果你的重点是“展示逻辑清晰、目录感强、内容不局限在一屏”，那这一版结构会比传统幻灯片更适合。它既保留了演示的节奏，也保留了网页的自由度。</p>
+
+                        <div class="grid-2">
+                            <div class="panel">
+                                <strong>当前版本已经具备</strong>
+                                <ul>
+                                    <li>封面页单独展示</li>
+                                    <li>左侧目录点击切换</li>
+                                    <li>页面内部滚轮浏览</li>
+                                </ul>
+                            </div>
+                            <div class="panel">
+                                <strong>下一步可以做</strong>
+                                <ul>
+                                    <li>自动生成目录</li>
+                                    <li>当前章节进度条</li>
+                                    <li>动画、暗色/亮色主题切换</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="callout">如果你愿意，我下一步可以继续把它升级成“多主题 + 自动目录 + Markdown 生成”的版本，仍然保持单文件或轻量结构。</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        const pages = Array.from(document.querySelectorAll('.page'));
+        const outline = document.getElementById('outline');
+        const ctas = Array.from(document.querySelectorAll('[data-go]'));
+        const themeButtons = Array.from(document.querySelectorAll('[data-theme-btn]'));
+        let currentIndex = 0;
+
+        function setTheme(theme) {
+            document.body.dataset.theme = theme;
+            themeButtons.forEach(button => {
+                button.classList.toggle('active', button.dataset.themeBtn === theme);
+            });
+            localStorage.setItem('html-presentation-theme', theme);
+        }
+
+        function buildOutline() {
+            outline.innerHTML = '';
+            pages.forEach((page, index) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.dataset.index = String(index);
+                button.innerHTML = `<span class="index">Page ${String(index + 1).padStart(2, '0')}</span>${page.dataset.title || `页面 ${index + 1}`}`;
+                button.addEventListener('click', () => activate(index));
+                outline.appendChild(button);
+            });
+        }
+
+        function updateOutline() {
+            const buttons = Array.from(outline.querySelectorAll('button'));
+            buttons.forEach((button, index) => {
+                button.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        function updateCoverState() {
+            document.body.classList.toggle('cover', currentIndex === 0);
+        }
+
+        function activate(index, options = {}) {
+            if (index < 0 || index >= pages.length) return;
+
+            pages[currentIndex].classList.remove('active');
+            currentIndex = index;
+            pages[currentIndex].classList.add('active');
+            updateOutline();
+            updateCoverState();
+
+            if (options.resetScroll !== false) {
+                const body = pages[currentIndex].querySelector('.page-body');
+                body.scrollTop = 0;
+            }
+        }
+
+        function nextPage() {
+            activate(Math.min(currentIndex + 1, pages.length - 1));
+        }
+
+        function prevPage() {
+            activate(Math.max(currentIndex - 1, 0));
+        }
+
+        function handleWheel(event) {
+            const body = event.currentTarget;
+            const atTop = body.scrollTop <= 0;
+            const atBottom = Math.ceil(body.scrollTop + body.clientHeight) >= body.scrollHeight;
+
+            if (event.deltaY > 0 && atBottom && currentIndex < pages.length - 1) {
+                event.preventDefault();
+                nextPage();
+            } else if (event.deltaY < 0 && atTop && currentIndex > 0) {
+                event.preventDefault();
+                prevPage();
+            }
+        }
+
+        function bindPageScroll() {
+            pages.forEach(page => {
+                const body = page.querySelector('.page-body');
+                body.addEventListener('wheel', handleWheel, { passive: false });
+            });
+        }
+
+        function handleKeydown(event) {
+            switch (event.key) {
+                case 'ArrowRight':
+                case 'PageDown':
+                    event.preventDefault();
+                    nextPage();
+                    break;
+                case 'ArrowLeft':
+                case 'PageUp':
+                    event.preventDefault();
+                    prevPage();
+                    break;
+                case 'Home':
+                    event.preventDefault();
+                    activate(0);
+                    break;
+                case 'End':
+                    event.preventDefault();
+                    activate(pages.length - 1);
+                    break;
+                case 'F11':
+                    event.preventDefault();
+                    if (!document.fullscreenElement) {
+                        document.documentElement.requestFullscreen().catch(() => {});
+                    } else {
+                        document.exitFullscreen();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        ctas.forEach(button => {
+            button.addEventListener('click', () => {
+                const index = Number(button.dataset.go);
+                activate(index);
+            });
+        });
+
+        themeButtons.forEach(button => {
+            button.addEventListener('click', () => setTheme(button.dataset.themeBtn));
+        });
+
+        document.addEventListener('keydown', handleKeydown);
+        buildOutline();
+        bindPageScroll();
+        setTheme(localStorage.getItem('html-presentation-theme') || 'aurora');
+        activate(0, { resetScroll: false });
+        updateOutline();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.hljs) {
+                document.querySelectorAll('pre code').forEach(block => window.hljs.highlightElement(block));
+            }
+        });
+    </script>
+</body>
+</html>
