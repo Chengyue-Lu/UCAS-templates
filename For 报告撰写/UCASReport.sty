@@ -16,6 +16,13 @@
 
 \ProvidesPackage{UCASReport}
 
+%%封面模式：默认reduced，可通过\usepackage[full]{UCASReport}切换为完整信息模式
+\newif\ifucasfullcover
+\ucasfullcoverfalse
+\DeclareOption{full}{\ucasfullcovertrue}
+\DeclareOption{reduced}{\ucasfullcoverfalse}
+\ProcessOptions\relax
+
 %%页边距
 \RequirePackage[left=2.50cm, right=2.50cm, top=2.50cm, bottom=2.50cm]{geometry}
 
@@ -107,30 +114,64 @@
 \setlength{\headheight}{15pt}
 \pagestyle{fancy}
 %\xeCJKsetup{AutoFakeBold=true}
-\setCJKfamilyfont{zhhei}{SimHei}[AutoFakeBold=true]
 \fancyhead[L]{}%%留空则不显示
 \fancyhead[C]{\fangsong 中国科学院大学课程调研报告}%%留空则不显示
 \fancyhead[R]{}%%留空则不显示
 
 
 %封面页设置
-{   
-    \title{ \vspace{3cm} \heiti \Huge \textbf{{课程报告}} \par
-    \vspace{1cm} 
-    \heiti \Large {\underline{报告题目}} %在此填写报告题目   
-    \vspace{3cm} }%标题
+\newcommand{\UCASCoverTitle}{课程报告}
+\newcommand{\UCASReportTitle}{报告题目}
+\newcommand{\UCASCourseName}{在此填写课程名称}
+\newcommand{\UCASAuthorName}{路诚钺}
+\newcommand{\UCASStudentID}{}
+\newcommand{\UCASCollege}{}
+\newcommand{\UCASAdminClass}{}
+\newcommand{\UCASTrainingUnit}{在此填写培养单位}
 
-    \author{
+\newcommand{\setUCASCoverTitle}[1]{\renewcommand{\UCASCoverTitle}{#1}}
+\newcommand{\setUCASReportTitle}[1]{\renewcommand{\UCASReportTitle}{#1}}
+\newcommand{\setUCASCourseName}[1]{\renewcommand{\UCASCourseName}{#1}}
+\newcommand{\setUCASAuthorName}[1]{\renewcommand{\UCASAuthorName}{#1}}
+\newcommand{\setUCASStudentID}[1]{\renewcommand{\UCASStudentID}{#1}}
+\newcommand{\setUCASCollege}[1]{\renewcommand{\UCASCollege}{#1}}
+\newcommand{\setUCASAdminClass}[1]{\renewcommand{\UCASAdminClass}{#1}}
+\newcommand{\setUCASTrainingUnit}[1]{\renewcommand{\UCASTrainingUnit}{#1}}
+
+\newcommand{\UCASReducedCoverAuthor}{
     \vspace{1cm}
-    \kaishu\Large 姓名\ \dlmu[11cm]{路诚钺} \qquad \\ %姓名 
-    %\vspace{0.5cm}
-    %\kaishu\Large  学号\ \dlmu[9cm]{在此填写学号} \qquad  \\ %学号
+    \kaishu\Large 姓名\ \dlmu[11cm]{\UCASAuthorName} \qquad \\ 
     \vspace{0.5cm}
-    \kaishu\Large   院所\ \dlmu[11cm]{中国科学院空天创新研究院} %院所
-        }
-        
-    \date{\today} % 默认为今天的日期，可以注释掉不显示日期
+    \kaishu\Large 院所\ \dlmu[11cm]{\UCASTrainingUnit}
 }
+
+\newcommand{\UCASFullCoverAuthor}{
+    \vspace{0.5cm}
+    \kaishu\Large 课\quad 程\quad 名\quad 称\ \dlmu[9cm]{\UCASCourseName} \qquad \\ 
+    \vspace{0.5cm}
+    \kaishu\Large 姓\qquad\qquad 名\ \dlmu[9cm]{\UCASAuthorName} \qquad \\ 
+    \vspace{0.5cm}
+    \kaishu\Large 学\qquad\qquad 号\ \dlmu[9cm]{\UCASStudentID} \qquad \\ 
+    \vspace{0.5cm}
+    \kaishu\Large 学\qquad\qquad 院\ \dlmu[9cm]{\UCASCollege} \qquad \\ 
+    \vspace{0.5cm}
+    \kaishu\Large 行\quad 政\quad 班\quad 级\ \dlmu[9cm]{\UCASAdminClass} \qquad \\ 
+    \vspace{0.5cm}
+    \kaishu\Large 培\quad 养\quad 单\quad 位\ \dlmu[9cm]{\UCASTrainingUnit}
+}
+
+\ifucasfullcover
+    \title{\vspace{3cm} \heiti \Huge \textbf{\UCASReportTitle} \par \vspace{1.5cm}}
+    \author{\UCASFullCoverAuthor}
+\else
+    \title{\vspace{3cm} \heiti \Huge \textbf{\UCASCoverTitle} \par
+    \vspace{1cm}
+    \heiti \Large {\underline{\UCASReportTitle}}
+    \vspace{3cm}}
+    \author{\UCASReducedCoverAuthor}
+\fi
+
+\date{\today} % 默认为今天的日期，可以注释掉不显示日期
 
 %%在这里可更改封面logo
 \newcommand{\cover}{
@@ -138,7 +179,19 @@
 \begin{figure}
     \centering
         \vspace{2cm}
-    \includegraphics[width=0.6\textwidth]{ucas_logo.pdf}
+    \IfFileExists{ucas_logo.pdf}{%
+        \includegraphics[width=0.6\textwidth]{ucas_logo.pdf}%
+    }{%
+        \IfFileExists{figures/ucas_logo.pdf}{%
+            \includegraphics[width=0.6\textwidth]{figures/ucas_logo.pdf}%
+        }{%
+            \IfFileExists{./figures/ucas_logo.pdf}{%
+                \includegraphics[width=0.6\textwidth]{./figures/ucas_logo.pdf}%
+            }{%
+                \vspace{2.2cm}
+            }%
+        }%
+    }
 \end{figure} 
 
 \maketitle

@@ -3,9 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML 演示 - 目录栏版本</title>
+    <title>HTML 演示模板 - Sidebar 目录栏版</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <style>
+        /*
+          ==========================================
+          Sidebar Presentation Template
+          左侧目录栏 + 右侧章节内容区
+
+          适合：
+          1. 调研报告
+          2. 章节式论文汇报
+          3. 内容较长、每页需要内部滚动的展示
+
+          使用说明：
+          - 每个 <section class="page" data-title="..."> 对应一个目录章节
+          - data-title 会自动显示在左侧目录中
+          - 每页内容写在 <div class="page-body"> 内
+          - 页面内部可以很长，滚轮会优先滚动本页
+          ==========================================
+        */
         :root,
         body[data-theme="aurora"] {
             --bg: #0b1020;
@@ -237,15 +254,23 @@
             border-radius: 999px;
         }
 
-        .cover {
+        .cover-page {
             display: grid;
-            align-items: center;
+            align-items: stretch;
             min-height: 100%;
-            padding: 24px 20px;
+            padding: 18px 12px 20px;
+        }
+
+        .cover-grid {
+            display: grid;
+            grid-template-columns: 1.16fr 0.84fr;
+            gap: 24px;
+            align-items: stretch;
         }
 
         .hero {
-            max-width: 980px;
+            max-width: none;
+            min-height: 100%;
             padding: 52px;
             border: 1px solid var(--border);
             border-radius: 30px;
@@ -253,6 +278,12 @@
             box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
+        }
+
+        .cover-side {
+            display: grid;
+            gap: 18px;
+            align-content: start;
         }
 
         .hero::before {
@@ -510,18 +541,6 @@
             text-transform: uppercase;
         }
 
-        body.cover .sidebar {
-            display: none;
-        }
-
-        body.cover .app {
-            grid-template-columns: 1fr;
-        }
-
-        body.cover .stage {
-            grid-column: 1 / -1;
-        }
-
         @media (max-width: 1024px) {
             .app {
                 grid-template-columns: 1fr;
@@ -537,10 +556,6 @@
                 box-shadow: var(--shadow);
             }
 
-            body.cover .sidebar {
-                display: none;
-            }
-
             .stage {
                 padding-bottom: 16px;
             }
@@ -553,6 +568,7 @@
                 padding: 30px 22px;
             }
 
+            .cover-grid,
             .hero-grid,
             .grid-2,
             .grid-3 {
@@ -561,12 +577,12 @@
         }
     </style>
 </head>
-<body class="cover" data-theme="aurora">
+<body data-theme="aurora">
     <div class="app">
         <aside class="sidebar" aria-label="章节目录">
             <div class="brand">
                 <h1>HTML 演示模板</h1>
-                <p>左侧目录栏 + 右侧滚动内容。点击目录即可切换页面，每页内部支持独立滚轮浏览。</p>
+                <p>目录栏版本。左侧负责章节导航，右侧负责内容展示；适合长内容、图文混排和讲义式汇报。</p>
             </div>
             <div class="theme-switcher" aria-label="颜色主题切换">
                 <button type="button" data-theme-btn="aurora" class="active">Aurora</button>
@@ -576,91 +592,127 @@
             <nav class="outline" id="outline"></nav>
             <div class="sidebar-footer">
                 键盘：← → 切页，Home/End 跳转，F11 全屏。<br>
-                页面内滚轮默认滚动内容，到顶部或底部时切换上一页/下一页。
+                滚轮：优先滚动当前页；到顶部或底部时切换上一页 / 下一页。<br>
+                主题：左侧按钮可切换，并自动记住上次选择。
             </div>
         </aside>
 
         <main class="stage" id="stage">
+            <!--
+              Cover Page
+              封面页会隐藏左侧 sidebar，适合做章节入口
+            -->
             <section class="page active" data-title="封面">
-                <div class="page-body cover">
-                    <div class="hero">
-                        <div class="eyebrow">Presentation / Outline layout</div>
-                        <h2>带目录栏的 HTML 展示模板</h2>
-                        <p>这份版本适合“章节式”展示。左侧常驻目录，右侧内容区按页浏览；每一页内部保留滚动，适合长内容、图文混排和逐段讲解。</p>
+                <div class="page-body cover-page">
+                    <div class="cover-grid">
+                        <div class="hero">
+                            <div class="eyebrow">Sidebar / Outline Template</div>
+                            <h2>带目录栏的 HTML 展示模板</h2>
+                            <p>这份版本更像“带导航的演示文稿”。左侧持续显示章节目录，右侧按页切换内容，并允许每一页继续内部滚动，适合长内容、图文混排和讲解型展示。</p>
 
-                        <div class="hero-grid">
-                            <div class="hero-card">
-                                <h3>适合的场景</h3>
+                            <div class="hero-grid">
+                                <div class="hero-card">
+                                    <h3>适合的场景</h3>
+                                    <ul>
+                                        <li>课程汇报、调研报告、项目展示</li>
+                                        <li>章节结构明确、需要目录感的内容</li>
+                                        <li>每页信息较多，希望页内继续滚动阅读</li>
+                                    </ul>
+                                </div>
+                                <div class="hero-card">
+                                    <h3>核心特性</h3>
+                                    <ul>
+                                        <li>左侧目录点击切页</li>
+                                        <li>每页独立滚动</li>
+                                        <li>主题切换、公式支持、代码高亮</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="cta-row">
+                                <button class="cta" data-go="1">查看使用场景</button>
+                                <button class="ghost" data-go="2">查看页面结构</button>
+                            </div>
+
+                            <div class="tag-row">
+                                <span class="tag">目录导航</span>
+                                <span class="tag">页内滚动</span>
+                                <span class="tag">公式支持</span>
+                                <span class="tag">代码高亮</span>
+                            </div>
+
+                            <div class="footer-note">提示：这一版更适合“讲义式展示”，不一定追求一页只讲一个点，而是强调目录感、结构感和阅读连续性。</div>
+                        </div>
+
+                        <div class="cover-side">
+                            <div class="panel">
+                                <strong>怎么使用</strong>
                                 <ul>
-                                    <li>课程汇报、调研报告、项目展示</li>
-                                    <li>需要目录感和章节切换的长内容</li>
-                                    <li>每页内容较多，希望页内继续滚动阅读</li>
+                                    <li>左侧目录负责章节导航</li>
+                                    <li>右侧每个 <span class="inline-code">section.page</span> 是一页</li>
+                                    <li><span class="inline-code">data-title</span> 会自动进入目录</li>
                                 </ul>
                             </div>
-                            <div class="hero-card">
-                                <h3>快速特性</h3>
+                            <div class="panel">
+                                <strong>什么时候选它</strong>
                                 <ul>
-                                    <li>左侧目录点击切页</li>
-                                    <li>每页独立滚动</li>
-                                    <li>无外部依赖，自包含单文件</li>
+                                    <li>需要章节结构而不是纯逐页切换</li>
+                                    <li>单页内容较多，想保留页内滚动</li>
+                                    <li>更像“讲义式展示”而不是传统 PPT</li>
+                                </ul>
+                            </div>
+                            <div class="panel">
+                                <strong>和简洁版的区别</strong>
+                                <ul>
+                                    <li>简洁版更像标准 PPT</li>
+                                    <li>这一版更像目录化文稿</li>
+                                    <li>适合长内容和模块化排版</li>
                                 </ul>
                             </div>
                         </div>
-
-                        <div class="cta-row">
-                            <button class="cta" data-go="1">进入目录</button>
-                            <button class="ghost" data-go="2">查看长内容示例</button>
-                        </div>
-
-                        <div class="tag-row">
-                            <span class="tag">公式支持</span>
-                            <span class="tag">代码高亮</span>
-                            <span class="tag">主题切换</span>
-                        </div>
-
-                        <div class="footer-note">提示：如果你之后想做得更像“网页课件”，这一版比传统 Beamer 更容易扩展动画、图表、交互和图像布局。</div>
                     </div>
                 </div>
             </section>
 
-            <section class="page" data-title="1. 为什么用 HTML">
+            <!-- Chapter 1 -->
+            <section class="page" data-title="1. 使用场景">
                 <div class="page-body">
                     <div class="section">
                         <div class="page-head">
                             <div>
                                 <div class="page-meta">Chapter 01</div>
-                                <h2>为什么把展示改成 HTML</h2>
+                                <h2>什么时候更适合用目录栏版本</h2>
                             </div>
                         </div>
-                        <p>LaTeX Beamer 的优势是排版稳、公式强、学术感足，但它在复杂图形、网页交互和灵活布局方面会比较受限。HTML 更像一个“可编程的展示容器”，适合你后面不断往里加图表、动效、交互按钮和嵌入式媒体。</p>
+                        <p>这一版并不是要替代所有幻灯片，而是适合特定类型的展示：当你的内容有明显章节结构、单页信息量偏大、需要目录辅助定位时，目录栏版本通常会比标准逐页 PPT 更舒服。</p>
 
                         <div class="grid-2">
                             <div class="panel">
-                                <strong>Beamer 更擅长</strong>
+                                <strong>适合使用本模板的情况</strong>
                                 <ul>
-                                    <li>数学公式和学术排版</li>
-                                    <li>统一严谨的版式</li>
-                                    <li>PDF 输出与打印</li>
+                                    <li>调研报告、阶段汇报、长内容讲解</li>
+                                    <li>需要左侧目录持续提示结构</li>
+                                    <li>某些页面需要继续向下滚动展开</li>
                                 </ul>
                             </div>
                             <div class="panel">
-                                <strong>HTML 更擅长</strong>
+                                <strong>不太适合使用本模板的情况</strong>
                                 <ul>
-                                    <li>灵活布局和复杂图形</li>
-                                    <li>局部滚动与目录导航</li>
-                                    <li>动画、交互和多媒体嵌入</li>
+                                    <li>每页都非常简洁、节奏极强的答辩式场景</li>
+                                    <li>需要大量 fragment 分步动画的展示</li>
+                                    <li>想尽量像传统 PPT 那样一页一结论</li>
                                 </ul>
                             </div>
                         </div>
 
-                        <div class="callout">如果你的展示内容需要“像网页一样”承载很多模块，HTML 基本会比 Beamer 更顺手。</div>
+                        <div class="callout">一句话理解：如果你要的是“章节导航 + 页内长内容”，这一版更合适；如果你要的是“强节奏逐页展示”，简洁版更合适。</div>
                     </div>
 
                     <div class="section">
                         <div class="page-head">
                             <div>
                                 <div class="page-meta">Chapter 01.2</div>
-                                <h2>目录栏的价值</h2>
+                                <h2>目录栏真正解决了什么</h2>
                             </div>
                         </div>
                         <div class="grid-3">
@@ -681,89 +733,100 @@
                 </div>
             </section>
 
-            <section class="page" data-title="2. 页面内滚动">
+            <!-- Chapter 2 -->
+            <section class="page" data-title="2. 页面结构">
                 <div class="page-body">
                     <div class="section">
                         <div class="page-head">
                             <div>
                                 <div class="page-meta">Chapter 02</div>
-                                <h2>页面内滚动的阅读体验</h2>
+                                <h2>这一版的页面结构怎么改</h2>
                             </div>
                         </div>
-                        <p>这一页故意放得长一点，模拟“一个页面里有很多小节”的情况。你滚轮时，优先在本页内部上下移动；只有到达顶部或底部时，才会自动切换上一页或下一页。</p>
+                        <p>如果你要把它改成自己的展示，最核心的结构只有两个：左侧的目录栏，和右侧的 <span class="inline-code">section.page</span> 页面。每个页面只要有一个 <span class="inline-code">data-title</span>，就会自动出现在目录中。</p>
 
                         <div class="grid-2">
                             <div class="panel">
-                                <strong>适合放什么</strong>
+                                <strong>页面结构最关键的两点</strong>
                                 <ul>
-                                    <li>长段解释文字</li>
-                                    <li>多张图和注释</li>
-                                    <li>表格、代码、流程图</li>
+                                    <li><span class="inline-code">data-title</span>：目录显示名称</li>
+                                    <li><span class="inline-code">.page-body</span>：当前页内容区</li>
+                                    <li>内部可以继续放 section、grid、panel、figure 等模块</li>
                                 </ul>
                             </div>
                             <div class="panel">
-                                <strong>交互方式</strong>
+                                <strong>模板修改流程</strong>
                                 <ul>
-                                    <li>滚轮滚动内容</li>
-                                    <li>目录栏点击切换页面</li>
-                                    <li>键盘方向键辅助翻页</li>
+                                    <li>先复制一个现有的 <span class="inline-code">section.page</span></li>
+                                    <li>修改 <span class="inline-code">data-title</span> 和页内标题</li>
+                                    <li>再把正文替换成你的图文内容</li>
                                 </ul>
                             </div>
                         </div>
 
-                        <div class="callout">如果你希望目录栏固定、内容区按页面滚动，这个结构比 Beamer 更接近“文稿 + 导航”的组合。</div>
+                        <div class="callout">这份模板的思路不是“每页压成一屏”，而是“章节清楚，页内可读”。所以它更接近“讲义 + 导航”的结构。</div>
                     </div>
 
                     <div class="section">
                         <div class="page-head">
                             <div>
                                 <div class="page-meta">Chapter 02.1</div>
-                                <h2>长内容示例</h2>
+                                <h2>可直接复制的页面骨架</h2>
                             </div>
                         </div>
-                        <div class="panel">
-                            <p>第一段：可以在这里放更细的说明，展示问题背景、方法步骤或实验设置。由于内容区可滚动，所以不必强行把所有信息压缩在一屏。</p>
-                            <p>第二段：当页面里存在图表、说明文字、对比段落和结论时，HTML 允许你按照阅读逻辑组织，而不是受限于固定幻灯片框架。</p>
-                            <p>第三段：如果后续你想做目录联动、高亮当前章节、自动生成章节列表，都可以继续往这个结构上加，不需要推翻重来。</p>
-                            <p>第四段：你也可以在这里放多图排版，比如左边图、右边说明，或者多列卡片。HTML 的 flex 和 grid 都很适合这种东西。</p>
-                            <p>第五段：滚动继续往下，可以显示更长的内容。这个模板的目标就是让“信息密度大但不拥挤”成为可能。</p>
-                            <p>第六段：如果你希望这一页更像论文报告，也可以把这一页拆成多段小标题，目录栏依然能维持整体结构感。</p>
-                            <p>第七段：长内容在演示时并不一定是坏事。只要导航清晰、视觉层次明确，它会比过度压缩的幻灯片更容易讲清楚逻辑。</p>
-                            <p>第八段：继续滚动可以体验到内容区的独立滚动效果。到达底部后，再往下滚会自动切到下一页。</p>
-                        </div>
+<pre><code class="language-html code">&lt;section class="page" data-title="你的章节标题"&gt;
+  &lt;div class="page-body"&gt;
+    &lt;div class="section"&gt;
+      &lt;div class="page-head"&gt;
+        &lt;div&gt;
+          &lt;div class="page-meta"&gt;Chapter 01&lt;/div&gt;
+          &lt;h2&gt;这一页的大标题&lt;/h2&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;p&gt;这里写导语。&lt;/p&gt;
+
+      &lt;div class="grid-2"&gt;
+        &lt;div class="panel"&gt;...&lt;/div&gt;
+        &lt;div class="panel"&gt;...&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre>
                     </div>
                 </div>
             </section>
 
-            <section class="page" data-title="3. 图文排版">
+            <!-- Chapter 3 -->
+            <section class="page" data-title="3. 常用模块">
                 <div class="page-body">
                     <div class="section">
                         <div class="page-head">
                             <div>
                                 <div class="page-meta">Chapter 03</div>
-                                <h2>图文排版与模块化内容</h2>
+                                <h2>常用模块示例</h2>
                             </div>
                         </div>
-                        <p>HTML 的优势之一是模块化特别自然。你可以直接把“图、表、说明、代码、按钮”混在同一页里，然后用布局系统去组合它们。</p>
+                        <p>这一页用占位内容演示几个最常用模块：说明卡片、图片占位区、代码块、公式块。你后续可以把这些模块直接替换成自己的图表、方法说明和实验结果。</p>
 
                         <div class="grid-3">
                             <div class="panel">
-                                <strong>图形</strong>
-                                <p>可以接入 SVG、Canvas、Chart.js、D3 或任何你自己的可视化输出。</p>
-                                <div class="figure">图形占位区</div>
+                                <strong>图片 / 图表占位</strong>
+                                <p>把这里换成论文图、截图、流程图、重绘图或实验图都可以。</p>
+                                <div class="figure">IMAGE / CHART PLACEHOLDER</div>
                             </div>
                             <div class="panel">
                                 <strong>代码</strong>
-                                <p>非常适合放演示代码、算法步骤、伪代码和配置示例。</p>
+                                <p>适合放伪代码、配置、脚本或结构示例。代码高亮依赖外部 CDN。</p>
 <pre><code class="language-python code">def transform(x):
     return x * x + 1
 
 print(transform(3))</code></pre>
                             </div>
                             <div class="panel">
-                                <strong>说明</strong>
-                                <p>文本可以自由排版，段落层级、强调、注释都很好控制。</p>
-                                <div class="figure">说明区占位</div>
+                                <strong>说明卡片</strong>
+                                <p>适合写“这张图说明什么”“这个模块解决什么”“这个实验结果支持什么结论”。</p>
+                                <div class="figure">TEXT / NOTE PLACEHOLDER</div>
                             </div>
                         </div>
 
@@ -803,16 +866,17 @@ print(transform(3))</code></pre>
                 </div>
             </section>
 
+            <!-- Chapter 4 -->
             <section class="page" data-title="4. 结论与扩展">
                 <div class="page-body">
                     <div class="section">
                         <div class="page-head">
                             <div>
                                 <div class="page-meta">Chapter 04</div>
-                                <h2>结论与下一步</h2>
+                                <h2>使用建议与后续扩展</h2>
                             </div>
                         </div>
-                        <p>如果你的重点是“展示逻辑清晰、目录感强、内容不局限在一屏”，那这一版结构会比传统幻灯片更适合。它既保留了演示的节奏，也保留了网页的自由度。</p>
+                        <p>如果你的重点是“目录清楚、内容可展开、每页不必强行压成一屏”，那这一版通常会比标准幻灯片更自然。它保留了演示的节奏，同时也保留了文稿式阅读的自由度。</p>
 
                         <div class="grid-2">
                             <div class="panel">
@@ -821,6 +885,7 @@ print(transform(3))</code></pre>
                                     <li>封面页单独展示</li>
                                     <li>左侧目录点击切换</li>
                                     <li>页面内部滚轮浏览</li>
+                                    <li>主题切换与目录高亮</li>
                                 </ul>
                             </div>
                             <div class="panel">
@@ -828,12 +893,12 @@ print(transform(3))</code></pre>
                                 <ul>
                                     <li>自动生成目录</li>
                                     <li>当前章节进度条</li>
-                                    <li>动画、暗色/亮色主题切换</li>
+                                    <li>演讲者备注、计时器、打印优化</li>
                                 </ul>
                             </div>
                         </div>
 
-                        <div class="callout">如果你愿意，我下一步可以继续把它升级成“多主题 + 自动目录 + Markdown 生成”的版本，仍然保持单文件或轻量结构。</div>
+                        <div class="callout">建议的使用顺序是：先改封面和目录标题，再替换每页正文，最后统一调整主题、配色和占位图。</div>
                     </div>
                 </div>
             </section>
@@ -852,6 +917,13 @@ print(transform(3))</code></pre>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>
+        /*
+          Sidebar 版本核心逻辑：
+          1. 根据 .page 自动生成左侧目录
+          2. 点击目录或按钮切换页面
+          3. 页面内优先滚动，到顶/到底后切页
+          4. 支持主题切换并记住用户选择
+        */
         const pages = Array.from(document.querySelectorAll('.page'));
         const outline = document.getElementById('outline');
         const ctas = Array.from(document.querySelectorAll('[data-go]'));
@@ -885,10 +957,6 @@ print(transform(3))</code></pre>
             });
         }
 
-        function updateCoverState() {
-            document.body.classList.toggle('cover', currentIndex === 0);
-        }
-
         function activate(index, options = {}) {
             if (index < 0 || index >= pages.length) return;
 
@@ -896,7 +964,6 @@ print(transform(3))</code></pre>
             currentIndex = index;
             pages[currentIndex].classList.add('active');
             updateOutline();
-            updateCoverState();
 
             if (options.resetScroll !== false) {
                 const body = pages[currentIndex].querySelector('.page-body');

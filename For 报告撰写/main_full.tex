@@ -1,0 +1,47 @@
+%!TeX program = xelatex
+\documentclass[12pt,hyperref,a4paper,UTF8]{ctexart}
+\usepackage[full]{UCASReport}
+
+% full封面模式下的信息填写示例
+\setUCASReportTitle{计算流体力学实践-xxx 报告}
+\setUCASCourseName{计算流体力学实践}
+\setUCASAuthorName{路诚钺}
+\setUCASStudentID{在此填写学号}
+\setUCASCollege{在此填写学院}
+\setUCASAdminClass{在此填写行政班级}
+\setUCASTrainingUnit{中国科学院空天创新研究院}
+
+%%-------------------------------正文开始---------------------------%%
+\begin{document}
+
+%%-----------------------封面--------------------%%
+\cover
+
+%%------------------摘要-------------%%
+%\begin{abstract}
+%
+%在此填写摘要内容
+%
+%\end{abstract}
+
+\thispagestyle{empty} % 首页不显示页码
+
+%%--------------------------目录页------------------------%%
+\newpage
+\tableofcontents
+
+%%------------------------正文页从这里开始-------------------%
+\newpage
+
+\section{模板说明}
+本文件是full封面模式示例。
+
+若使用精简封面，请切换为main.tex并使用\verb|\usepackage{UCASReport}|。
+
+\section{正文示例}
+在此撰写正文内容。
+
+%%----------- 参考文献 -------------------%%
+%\reference
+
+\end{document}

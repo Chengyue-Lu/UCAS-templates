@@ -1,216 +1,446 @@
-# HTML 演示模板
+﻿# HTML Presentation Template
 <!-- markdownlint-disable -->
+
 ## 简介
 
-一个简单但功能完整的 HTML 演示文稿框架，提供全屏沉浸式展示体验。相比 LaTeX Beamer，HTML 提供了更灵活的排版和更容易集成新图形的能力。
+这是一个适合课程汇报、论文展示、项目路演初稿的 **HTML 幻灯片模板**。  
 
-## 快速开始
+它的目标不是做成大型前端框架，而是提供一套：
 
-### 1. 在浏览器中打开
-直接在浏览器中打开 `index.html` 文件即可开始演示。
+- 本地双击即可打开
+- 不依赖构建工具
+- 样式清晰、学术感较强
+- 支持翻页、全屏、进度条、逐步显示
+- 容易直接复制修改
 
-### 2. 修改内容
-编辑 `index.html` 中的 `<section class="slide">` 块来添加你的内容。
+这次模板刻意采用了 **图片占位符**，不绑定任何现成图片或具体内容，方便其他人直接套用。
 
-### 3. 自定义样式
-修改 `styles.css` 来调整颜色、字体大小、背景等样式。
-
-## 快捷键
-
-| 快捷键 | 功能 |
-|--------|------|
-| `→` 或 `D` | 下一张幻灯片 |
-| `←` 或 `A` | 上一张幻灯片 |
-| `Home` | 跳到首页 |
-| `End` | 跳到末页 |
-| `F` | 切换演讲者备注（屏幕下部） |
-| `F5` | 全屏播放 |
-| 点击 | 左侧前一张，右侧下一张 |
+---
 
 ## 文件结构
 
-```
+```text
 For HTML Presentation/
-├── index.html       # 主文件，包含幻灯片内容
-├── styles.css       # 样式表
-├── script.js        # 交互逻辑
-├── sidebar-outline-presentation.html  # 左侧目录栏 + 页面内滚动版本
-└── README.md        # 本文件
+├── presentation-template.html
+├── styles.css
+├── script.js
+├── example-advanced.html
+├── sidebar-template.html
+└── README.md
 ```
 
-如果你更想要“左侧目录栏 + 每页可滚动”的展示方式，直接打开 `sidebar-outline-presentation.html` 即可，它是独立的一份新实现。
+当前目录里建议重点保留并使用两个版本：
 
-这个版本优先支持数学公式和代码展示，并内置了几套整体配色主题，方便你保持全文风格一致，而不是在每一页里手写散乱的 RGB 值。
+- `presentation-template.html`：简洁版，适合标准 PPT 式逐页展示
+- `sidebar-template.html`：目录栏版，适合章节式长内容展示
 
-数学公式可以直接写成 `$...$` 和 `$$...$$`，代码块可以直接写在 `<pre><code>` 里；页面左侧也提供了 `Aurora`、`Midnight`、`Paper` 三套主题切换按钮。
+另外两个文件：
 
-## 内容编写指南
+- `styles.css`
+- `script.js`
 
-### 基础幻灯片结构
+是 `presentation-template.html` 配套的样式与脚本文件。
+
+其余文件：
+
+- `example-advanced.html`
+
+作为历史示例保留，不是当前主推入口。
+
+---
+
+## 两个模板怎么选
+
+### 版本对照
+
+| 版本 | 文件 | 更适合什么场景 | 主要特点 |
+|------|------|----------------|----------|
+| 简洁版 | `presentation-template.html` | 课程汇报、论文汇报、项目答辩、标准幻灯片展示 | 单页切换、节奏明确、支持 fragment、结构像传统 PPT |
+| 目录栏版 | `sidebar-template.html` | 调研报告、章节式展示、内容偏长的讲解型汇报 | 左侧常驻目录、右侧页内滚动、适合图文混排和长内容 |
+
+## 快速开始
+
+### 1. 直接打开
+
+直接在浏览器中打开对应文件即可：
+
+- `presentation-template.html`
+- 或 `sidebar-template.html`
+
+### 2. 修改标题与内容
+
+如果你使用简洁版，编辑 `presentation-template.html` 中的每一个：
+
+```html
+<section class="slide"> ... </section>
+```
+
+每个 `section.slide` 就是一页幻灯片。
+
+如果你使用目录栏版，则编辑：
+
+```html
+<section class="page"> ... </section>
+```
+
+每个 `section.page` 对应左侧目录中的一页。
+
+### 3. 替换占位图
+
+简洁版模板里的图示页目前使用的是占位框：
+
+```html
+<div class="media-placeholder">
+    <div class="placeholder-title">IMAGE / CHART PLACEHOLDER</div>
+    <div class="placeholder-note">把这里替换成论文图、方法图、结果图或重绘图</div>
+</div>
+```
+
+你可以把它直接换成真实图片，例如：
+
+```html
+<figure class="real-figure">
+    <img src="images/figure1.png" alt="图 1">
+    <figcaption>图注说明</figcaption>
+</figure>
+```
+
+或者继续保留占位框，等内容最终定稿后再统一替换。
+
+---
+
+## 模板包含哪些页面
+
+简洁版模板内置了 5 种最常用页面：
+
+1. 封面页
+2. 问题提出页
+3. 图示解释页
+4. 并列对照页
+5. 总结页
+
+这 5 页已经足够支撑大多数课程汇报或论文展示的初稿搭建。
+
+---
+
+## 交互功能
+
+### 简洁版 `presentation-template.html`
+
+支持以下交互：
+
+### 键盘快捷键
+
+| 按键 | 功能 |
+|------|------|
+| `→` / `PageDown` / `Space` / `Enter` | 下一步；若本页有 fragment，则优先展开 fragment |
+| `←` / `PageUp` / `Backspace` | 上一步；若本页已展开 fragment，则优先回退 fragment |
+| `Home` | 跳到第一页 |
+| `End` | 跳到最后一页 |
+| `F` | 切换全屏 |
+
+### 鼠标点击
+
+- 点击页面左侧区域：上一页 / 上一步
+- 点击页面右侧区域：下一页 / 下一步
+
+### 页面状态
+
+底部工具栏会自动显示：
+
+- 当前页码
+- 总页数
+- 进度条
+- 全屏按钮
+
+### 目录栏版 `sidebar-template.html`
+
+支持以下交互：
+
+| 按键/操作 | 功能 |
+|-----------|------|
+| `← / →` | 上一页 / 下一页 |
+| `PageUp / PageDown` | 上一页 / 下一页 |
+| `Home / End` | 跳到第一页 / 最后一页 |
+| `F11` | 浏览器全屏 |
+| 点击左侧目录 | 直接跳转到对应章节 |
+| 滚轮 | 优先滚动当前页内容；到顶/到底后切上一页或下一页 |
+
+目录栏版另外还有：
+
+- 左侧章节导航
+- 主题切换
+- 页内长内容滚动
+- 公式与代码展示支持
+
+---
+
+## 如何新增页面
+
+如果你使用简洁版，最简单的方式，是复制一个现有的 `section.slide`：
 
 ```html
 <section class="slide">
-    <div class="slide-content">
-        <h2>标题</h2>
-        <p>内容</p>
+    <header class="slide-head">
+        ...
+    </header>
+
+    <div class="slide-body">
+        ...
     </div>
+
+    <footer class="slide-foot">
+        ...
+    </footer>
 </section>
 ```
 
-### 常用元素
+然后粘贴到 `#stage` 内部即可。
 
-#### 标题页
-```html
-<section class="slide active">
-    <div class="slide-content">
-        <h1>你的展示标题</h1>
-        <h2 class="subtitle">副标题</h2>
-        <p class="author">作者名称 | 日期</p>
-    </div>
-</section>
-```
+脚本会自动：
 
-#### 内容页（列表）
-```html
-<section class="slide">
-    <div class="slide-content">
-        <h2>标题</h2>
-        <ul class="content-list">
-            <li>要点一</li>
-            <li>要点二</li>
-            <li>要点三</li>
-        </ul>
-    </div>
-</section>
-```
+- 统计总页数
+- 更新页码
+- 更新底部进度条
 
-#### 两列布局
-```html
-<section class="slide">
-    <div class="slide-content">
-        <h2>标题</h2>
-        <div class="two-column">
-            <div class="column">
-                <h3>左列标题</h3>
-                <p>左列内容</p>
-            </div>
-            <div class="column">
-                <h3>右列标题</h3>
-                <p>右列内容</p>
-            </div>
-        </div>
-    </div>
-</section>
-```
+你不需要手动修改脚本逻辑。
 
-#### 图片
-```html
-<img src="path/to/image.jpg" alt="描述" class="slide-image">
-```
-
-#### 演讲者备注
-在幻灯片的 `section` 标签上添加 `data-notes` 属性：
+如果你使用目录栏版，则复制：
 
 ```html
-<section class="slide" data-notes="这里是仅演讲者能看到的备注">
-    <div class="slide-content">
+<section class="page" data-title="你的标题">
+    <div class="page-body">
         ...
     </div>
 </section>
 ```
 
-## 自定义主题
+其中：
 
-目录栏版本支持三套预置主题：
-- Aurora：默认深色渐变
-- Midnight：更冷的蓝紫色深色主题
-- Paper：浅色纸面主题
-
-你可以直接在页面左侧切换主题，系统会记住上次选择。
-
-编辑 `styles.css` 中的主题颜色：
-
-```css
-/* 当前配色（紫色渐变） */
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-```
-
-常用颜色组合：
-- 蓝色 → 紫色：`linear-gradient(135deg, #667eea 0%, #764ba2 100%)`
-- 绿色 → 青色：`linear-gradient(135deg, #11998e 0%, #38ef7d 100%)`
-- 橙色 → 红色：`linear-gradient(135deg, #f093fb 0%, #f5576c 100%)`
-- 深灰 → 黑色：`linear-gradient(135deg, #2c3e50 0%, #000000 100%)`
-
-## 高级功能
-
-### 添加新幻灯片
-在 `index.html` 中的 `</section>` 之前添加：
-
-```html
-<section class="slide">
-    <div class="slide-content">
-        <!-- 你的内容 -->
-    </div>
-</section>
-```
-
-然后脚本会自动更新总页数计数器。
-
-### 修改动画时间
-在 `styles.css` 中编辑：
-
-```css
-.slide {
-    transition: opacity 0.6s ease-in-out;  /* 改为 0.3s 可以更快 */
-}
-```
-
-### 禁用点击切换
-在 `script.js` 中注释掉鼠标事件：
-
-```javascript
-// document.addEventListener('click', (e) => { ... });
-```
-
-## 浏览器兼容性
-
-- Chrome 60+
-- Firefox 55+
-- Safari 12+
-- Edge 79+
-
-## 推荐用法
-
-1. **实时编辑**：用代码编辑器和浏览器并排显示
-2. **导出 PDF**：使用浏览器打印功能（Ctrl+P）并选择"另存为 PDF"
-3. **分享**：将整个文件夹压缩后分发，不需要任何依赖
-
-## 后续功能扩展建议
-
-- [ ] Markdown 支持（使用 marked.js）
-- [ ] 幻灯片过渡动画库
-- [ ] 演讲计时器
-- [ ] 主题切换器
-- [ ] 代码高亮支持
-- [ ] 数学公式支持（MathJax）
-- [ ] 视频/音频嵌入
-- [ ] 演讲者视图（双屏显示）
-
-## 常见问题
-
-**Q: 如何在幻灯片上插入代码？**
-A: 在 `index.html` 中添加 `<pre><code class="language-python">...</code></pre>` 即可。可选择添加代码高亮库（如 Highlight.js）。
-
-**Q: 能否支持 Markdown 格式？**
-A: 可以添加 marked.js 库来支持，在后续版本中会提供。
-
-**Q: 如何在演讲时隐藏控制栏？**
-A: 按 F5 进入全屏）或修改 CSS 中的 `.controls` 样式。
-
-## 许可证
-
-自由使用和修改。
+- `data-title` 会显示在左侧目录里
+- `.page-body` 是这一页真正的内容区
 
 ---
 
-祝演示顺利！如有问题欢迎改进。
+## 如何做“逐步出现”
+
+如果你想让某个元素在简洁版演示时逐步出现，只需要给它加上：
+
+```html
+class="fragment"
+```
+
+例如：
+
+```html
+<div class="card fragment">
+    <h3>逐步显示的卡片</h3>
+    <p>这张卡片不会在进入页面时立即出现。</p>
+</div>
+```
+
+运行时：
+
+- 第一次按下一步，先出现第一个 fragment
+- 再按下一步，出现下一个 fragment
+- 当前页 fragment 全部显示后，才进入下一页
+
+这对于课堂展示特别有用，因为可以控制信息展开节奏，避免一页内容同时砸给听众。
+
+说明：
+
+- `fragment` 主要用于简洁版
+- 目录栏版当前更偏“章节讲义式阅读”，不以内建 fragment 为主
+
+---
+
+## 如何修改样式
+
+### 1. 改整体颜色
+
+如果你使用简洁版，优先修改 `styles.css` 顶部的变量：
+
+```css
+:root {
+    --bg: #f3eee5;
+    --text: #21313d;
+    --primary: #0f5c5b;
+    --accent: #b55d43;
+}
+```
+
+最常改的是：
+
+- `--bg`：整体背景
+- `--text`：正文颜色
+- `--primary`：主强调色
+- `--accent`：辅助强调色
+
+### 2. 改页面尺寸
+
+简洁版默认是 16:9：
+
+```css
+#stage {
+    width: 1600px;
+    height: 900px;
+}
+```
+
+如果你要做 4:3 或其他比例，可以改这里。
+
+### 3. 改页面布局
+
+简洁版常见布局类在 `styles.css` 中已经定义好：
+
+- `.hero`
+- `.two-col`
+- `.media-layout`
+- `.card-grid`
+- `.three-col`
+- `.stack`
+
+通常只需要组合这些类，而不必每次重写布局。
+
+---
+
+## 推荐写作方式
+
+两份模板都适合以下内容组织方式：
+
+- 封面页：给出问题定位，而不是只写标题
+- 背景页：先讲问题场景，再讲为什么原方法不够
+- 方法页：少堆术语，多解释“为什么需要这一设计”
+- 图示页：图负责给直觉，文字负责给结论
+- 总结页：强调“真正推进了什么”，而不是简单复述模块
+
+不太推荐：
+
+- 每页塞满大段文字
+- 把副标题写成“提醒自己怎么讲”的备忘录
+- 图很多但没有解释它们为什么出现
+
+---
+
+## 把占位图换成真实内容的建议
+
+你后续替换图时，建议优先考虑这几种内容：
+
+1. 论文原图
+2. 自己重绘的流程图
+3. 对照图或结构图
+4. 实验曲线图
+5. 截图或界面示意图
+
+建议避免：
+
+- 只为了“看起来丰富”而插图
+- 放很复杂但又来不及讲清楚的原图
+- 一页塞多个没有主次关系的图
+
+---
+
+## 常见修改任务
+
+### 任务 1：替换封面信息
+
+改 `presentation-template.html` 中第一页：
+
+- `你的展示标题`
+- 副标题
+- 主题卡片
+- 关键词
+
+### 任务 2：增加一页实验结果
+
+复制第 3 页或第 4 页结构，替换为：
+
+- 一张图
+- 三条解释
+
+### 任务 3：做文献综述页
+
+复制第 4 页的并列卡片布局，每块卡片写：
+
+- 论文名
+- 做了什么
+- 留下了什么问题
+
+### 任务 4：做方法总览页
+
+复制第 2 页结构，左边写步骤递进，右边写解释卡片。
+
+---
+
+## 浏览器兼容性
+
+推荐浏览器：
+
+- Chrome
+- Edge
+- Firefox
+
+本模板使用的是常规 HTML/CSS/JS，不依赖外部库，现代浏览器都可以正常运行。
+
+---
+
+## 导出与分享
+
+### 本地演示
+
+直接打开目标文件即可：
+
+- `presentation-template.html`
+- `sidebar-template.html`
+
+### 导出 PDF
+
+可使用浏览器打印功能：
+
+1. 打开页面
+2. `Ctrl + P`
+3. 选择“另存为 PDF”
+
+注意：如果你使用了 fragment，打印时会显示全部内容。
+
+### 发给别人
+
+最简单的方式是把整个文件夹打包发送，因为：
+
+- `presentation-template.html` 依赖 `styles.css`
+- `presentation-template.html` 依赖 `script.js`
+- `sidebar-template.html` 虽然是单文件，但如果你后续加入本地图片，也依然需要保持相对路径
+
+额外提醒：
+
+- `sidebar-template.html` 默认使用外部 CDN 加载 `highlight.js` 和 `MathJax`
+- 如果你在完全离线环境中使用它，代码高亮和公式渲染功能可能受影响
+- 简洁版 `presentation-template.html` 没有这个问题，更适合离线直接分发
+
+---
+
+## 如果你想进一步扩展
+
+这份模板现在保持“轻量优先”。如果后续要增强，可以继续加：
+
+- MathJax 数学公式支持
+- 代码高亮
+- 演讲者备注区
+- 主题切换
+- 自动目录页
+- Markdown 转幻灯片
+
+---
+
+## 最后建议
+
+如果你是第一次用 HTML 做 PPT，最好的方式不是从零写，而是：
+
+1. 先确定你要用“简洁版”还是“目录栏版”
+2. 先搭出 5 到 8 页基本结构
+3. 再逐页替换内容
+4. 最后统一调整颜色、字体和图片
+
+这样会比一开始就追求复杂动效更稳定，也更适合课程汇报与论文展示。
+
+

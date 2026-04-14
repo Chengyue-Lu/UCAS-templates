@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Presentation Template</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!--
+      HTML Presentation Template
+      这是一份更简洁的演示模板：
+      1. 不依赖构建工具
+      2. 不使用真实图片，统一改成占位符
+      3. 支持翻页、全屏、进度条、逐步显示
+
+      使用方式：
+      - 复制一个 <section class="slide"> ... </section> 作为新页
+      - 给元素加 class="fragment" 可实现逐步出现
+      - 把占位框改成真实图片、图表、流程图即可
+    -->
+
+    <!-- 左右点击翻页区域 -->
+    <div class="nav-zone nav-zone-left" id="prevZone" aria-hidden="true"></div>
+    <div class="nav-zone nav-zone-right" id="nextZone" aria-hidden="true"></div>
+
+    <div id="viewport">
+        <main id="stage">
+
+            <!-- Slide 1: 封面页 -->
+            <section class="slide active" data-title="封面">
+                <header class="slide-head">
+                    <div class="slide-tag">Cover</div>
+                    <div class="slide-no">01 / 05</div>
+                </header>
+
+                <div class="slide-body hero">
+                    <div class="hero-main">
+                        <div class="hero-kicker">课程汇报 / 项目展示 / 学术报告</div>
+                        <h1>你的展示标题</h1>
+                        <p class="hero-subtitle">在这里写一句正式的副标题，说明这份展示在讲什么。</p>
+                        <div class="hero-thesis fragment">
+                            <div class="hero-thesis-label">Core Message</div>
+                            <div class="hero-thesis-text">把你的核心问题、结论或价值压缩成一句能被记住的话。</div>
+                        </div>
+                    </div>
+
+                    <aside class="hero-side">
+                        <div class="card fragment">
+                            <div class="card-label">主题</div>
+                            <h3>问题域 / 课程名</h3>
+                            <p>例如：多智能体系统、机器学习、课程论文汇报。</p>
+                        </div>
+                        <div class="card fragment">
+                            <div class="card-label">关键词</div>
+                            <div class="pill-list">
+                                <span class="pill">keyword 1</span>
+                                <span class="pill">keyword 2</span>
+                                <span class="pill">keyword 3</span>
+                                <span class="pill">keyword 4</span>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+
+                <footer class="slide-foot">
+                    <div class="takeaway"><strong>建议</strong>：封面页最好直接给出这场展示的“问题定位”，不要只放标题和作者。</div>
+                    <div class="hint">← → 翻页 · Space 展开 · F 全屏</div>
+                </footer>
+            </section>
+
+            <!-- Slide 2: 列表页 -->
+            <section class="slide" data-title="问题提出">
+                <header class="slide-head">
+                    <div>
+                        <div class="slide-tag">Part 1</div>
+                        <h2 class="slide-title">问题提出页模板</h2>
+                        <p class="slide-desc">这一页适合用来交代背景、说明为什么原有方法不够，或定义你真正关心的问题。</p>
+                    </div>
+                    <div class="slide-no">02 / 05</div>
+                </header>
+
+                <div class="slide-body two-col">
+                    <div class="stack">
+                        <div class="step-card fragment">
+                            <div class="step-index">01</div>
+                            <div>
+                                <h3>先讲场景或背景</h3>
+                                <p>先把听众带进问题，不要一上来就讲方法或公式。</p>
+                            </div>
+                        </div>
+                        <div class="step-card fragment">
+                            <div class="step-index">02</div>
+                            <div>
+                                <h3>再讲真正困难在哪里</h3>
+                                <p>说明不是“不会做”，而是“为什么传统做法会遇到结构性困难”。</p>
+                            </div>
+                        </div>
+                        <div class="step-card fragment">
+                            <div class="step-index">03</div>
+                            <div>
+                                <h3>最后落到核心问题</h3>
+                                <p>这一块建议作为承接，顺势把听众带到下一页的方法或研究脉络。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stack">
+                        <div class="card fragment">
+                            <div class="card-label">适用写法</div>
+                            <h3>左侧讲递进，右侧讲解释</h3>
+                            <p>这类双栏页很适合做“现象 vs 含义”“已有做法 vs 研究缺口”“问题 vs 影响”的对照。</p>
+                        </div>
+                        <div class="card accent fragment">
+                            <div class="card-label">注意</div>
+                            <h3>不要把副标题写成给自己看的备注</h3>
+                            <p>副标题应该服务听众理解，例如说明这页的作用、结论或在整场报告中的位置。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 3: 图片/图表占位页 -->
+            <section class="slide" data-title="图示解释">
+                <header class="slide-head">
+                    <div>
+                        <div class="slide-tag">Part 2</div>
+                        <h2 class="slide-title">图示页模板</h2>
+                        <p class="slide-desc">这里不用真实图片，只保留占位框，方便你后续替换成论文图、实验图、流程图或截图。</p>
+                    </div>
+                    <div class="slide-no">03 / 05</div>
+                </header>
+
+                <div class="slide-body media-layout">
+                    <div class="media-placeholder fragment" role="img" aria-label="图片占位符">
+                        <div class="placeholder-title">IMAGE / CHART PLACEHOLDER</div>
+                        <div class="placeholder-note">把这里替换成论文图、方法图、结果图或重绘图</div>
+                    </div>
+
+                    <div class="stack">
+                        <div class="card fragment">
+                            <div class="card-label">Point 1</div>
+                            <h3>先讲这张图在说明什么</h3>
+                            <p>不要先逐细节解释。应该先告诉听众，这张图在整场报告里承担什么作用。</p>
+                        </div>
+                        <div class="card fragment">
+                            <div class="card-label">Point 2</div>
+                            <h3>再讲最关键的结构或差异</h3>
+                            <p>只挑支撑主线的部分讲，不要把复杂图完整照念一遍。</p>
+                        </div>
+                        <div class="card fragment">
+                            <div class="card-label">Point 3</div>
+                            <h3>最后落到你的结论</h3>
+                            <p>用一句话讲清：这张图为什么能支持你的问题、方法或实验解释。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="slide-foot">
+                    <div class="takeaway"><strong>模板提示</strong>：复杂原图不一定要整张搬上来，很多时候裁图或重绘更适合课堂汇报。</div>
+                </footer>
+            </section>
+
+            <!-- Slide 4: 并列卡片页 -->
+            <section class="slide" data-title="对照结构">
+                <header class="slide-head">
+                    <div>
+                        <div class="slide-tag">Part 3</div>
+                        <h2 class="slide-title">并列对照页模板</h2>
+                        <p class="slide-desc">适合用来展示研究脉络、方法模块、实验平行组，或者多个对照维度。</p>
+                    </div>
+                    <div class="slide-no">04 / 05</div>
+                </header>
+
+                <div class="slide-body card-grid">
+                    <div class="card fragment">
+                        <div class="card-label">Block A</div>
+                        <h3>问题背景</h3>
+                        <p>这里可以写任务背景、研究起点或第一个关键节点。</p>
+                    </div>
+                    <div class="card fragment">
+                        <div class="card-label">Block B</div>
+                        <h3>已有推进</h3>
+                        <p>这里适合放相关工作、前作方法或上一阶段结论。</p>
+                    </div>
+                    <div class="card fragment">
+                        <div class="card-label">Block C</div>
+                        <h3>研究缺口</h3>
+                        <p>这里写为什么前面的推进还不够，以及还缺哪一步。</p>
+                    </div>
+                    <div class="card accent fragment">
+                        <div class="card-label">Block D</div>
+                        <h3>你的切入点</h3>
+                        <p>最后一块通常用来落到本文、你的方案，或者你想强调的创新。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 5: 总结页 -->
+            <section class="slide" data-title="总结">
+                <header class="slide-head">
+                    <div>
+                        <div class="slide-tag">Ending</div>
+                        <h2 class="slide-title">总结页模板</h2>
+                        <p class="slide-desc">总结页建议提升问题层次，不建议再引入新的核心内容。</p>
+                    </div>
+                    <div class="slide-no">05 / 05</div>
+                </header>
+
+                <div class="slide-body ending-layout">
+                    <div class="quote-card fragment">
+                        在这里写一句总结句。<br>
+                        建议表达“这项工作真正推进了什么”。
+                    </div>
+
+                    <div class="three-col">
+                        <div class="panel fragment">
+                            <h3>传统视角</h3>
+                            <p>过去通常怎样理解这个问题。</p>
+                        </div>
+                        <div class="panel fragment">
+                            <h3>本文视角</h3>
+                            <p>这项工作相比前人多推进了哪一步。</p>
+                        </div>
+                        <div class="panel fragment">
+                            <h3>最后记忆点</h3>
+                            <p>听众离场后应该记住的那句话。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="slide-foot">
+                    <div class="takeaway"><strong>建议</strong>：总结页不是“复述全部内容”，而是重新定义这份工作的价值。</div>
+                </footer>
+            </section>
+        </main>
+    </div>
+
+    <!-- 底部工具栏 -->
+    <div class="toolbar">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="page-counter" id="pageCounter">01 / 05</div>
+        <button class="toolbar-btn" id="fullscreenBtn" type="button">全屏</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
